@@ -22,11 +22,24 @@ impl Default for client{
     
 }
 impl client {
-    fn connect(&self) -> Result<connect, error>
+    pub fn connect(&self) -> Result<connect, error>
     {
         let mut stream = TcpStream::connect(format!("{}:{}", self.hostname, self.port));
         match stream {
-            Ok(stream) => return Ok(connect{stream}),
+            Ok(mut e) => {
+                let result = e.write_all(b"0x34c2bdc3");
+                match result {
+                    Ok(_) => print!("toto"),
+                    Err(_) => print!("ERR")
+                }
+                let buf = &mut [0; 128];
+                let read = e.read(buf);
+                match read {
+                    Ok(data) => print!("{:?}", buf),
+                    Err(_) => print!("ERROR")
+                }
+                return Ok(connect{stream : e })
+            },
             Err(_) => return Err(error{})
         }
     }

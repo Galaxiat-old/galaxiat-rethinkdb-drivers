@@ -2,5 +2,5 @@ mod drivers_type;
 
 
 fn main() {
-    println!("Hello, world!");
+    drivers_type::client::default().connect();
 }
